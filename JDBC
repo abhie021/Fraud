@@ -1,0 +1,162 @@
+SQL 
+
+create database studentdb;
+use studentdb;
+create table student(
+id int,
+name varchar(20),
+marks int
+);
+
+Eclipse /
+Add connector
+
+TestConnection
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+public class TestConnection {
+    public static void main(String[] args) {
+         try {
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                System.out.println("Loaded driver");
+                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/?user=root&password=root");
+                System.out.println("Connected to MySQL");
+                con.close();
+         } 
+         catch (Exception ex) {
+                ex.printStackTrace();
+         }
+    }
+}
+
+
+InsertData
+import java.sql.*;
+
+public class InsertStudent
+{
+    public static void main(String args[])
+    {
+        try
+        {
+            // STEP 1: Load Driver
+
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            System.out.println("Driver Loaded");
+
+            // STEP 2: Establish Connection
+
+            String url =
+            "jdbc:mysql://localhost:3306/studentdb";
+
+            String uname = "root";
+            String password = "root";
+
+            Connection con =
+            DriverManager.getConnection(url, uname, password);
+
+            System.out.println("Connection Established");
+
+            // STEP 3: Create Statement
+
+            Statement st = con.createStatement();
+
+            // STEP 4: Insert Query
+
+            String q =
+            "insert into student values(1,'Hemant',85)";
+
+            int x = st.executeUpdate(q);
+
+            if(x > 0)
+                System.out.println("Data Inserted Successfully");
+
+            // STEP 5: Close Connection
+
+            st.close();
+            con.close();
+
+            System.out.println("Connection Closed");
+        }
+
+        catch(Exception e)
+        {
+            System.out.println(e);
+        }
+    }
+}
+
+RetrieveStudent.java
+import java.sql.*;
+
+public class RetrieveStudent
+{
+    public static void main(String args[])
+    {
+        try
+        {
+            // STEP 1: Load Driver
+
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            System.out.println("Driver Loaded");
+
+            // STEP 2: Establish Connection
+
+            String url =
+            "jdbc:mysql://localhost:3306/studentdb";
+
+            String uname = "root";
+            String password = "root";
+
+            Connection con =
+            DriverManager.getConnection(url, uname, password);
+
+            System.out.println("Connection Established");
+
+            // STEP 3: Create Statement
+
+            Statement st = con.createStatement();
+
+            // STEP 4: Select Query
+
+            String q = "select * from student";
+
+            ResultSet rs = st.executeQuery(q);
+
+            System.out.println("\nStudent Records");
+
+            System.out.println("ID\tNAME\tMARKS");
+
+            // STEP 5: Display Records
+
+            while(rs.next())
+            {
+                int id = rs.getInt(1);
+
+                String name = rs.getString(2);
+
+                int marks = rs.getInt(3);
+
+                System.out.println(
+                id + "\t" + name + "\t" + marks);
+            }
+
+            // STEP 6: Close Connection
+
+            rs.close();
+            st.close();
+            con.close();
+
+            System.out.println("\nConnection Closed");
+        }
+
+        catch(Exception e)
+        {
+            System.out.println(e);
+        }
+    }
+}
+
