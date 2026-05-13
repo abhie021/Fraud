@@ -1,47 +1,67 @@
 MathInterface.java
 
-package rmi;
 import java.rmi.*;
 
-public interface MathInterface extends Remote {
-    int add(int a, int b) throws RemoteException;
-    int sub(int a, int b) throws RemoteException;
-    int mul(int a, int b) throws RemoteException;
-    int div(int a, int b) throws RemoteException;
+public interface CalculatorInterface extends Remote
+{
+    int add(int a,int b) throws RemoteException;
+
+    int sub(int a,int b) throws RemoteException;
+
+    int mul(int a,int b) throws RemoteException;
+
+    float div(int a,int b) throws RemoteException;
 }
 
 MathServer.java
 
-package rmi;
 import java.rmi.*;
 import java.rmi.server.*;
+import java.rmi.registry.*;
 
-public class MathServer extends UnicastRemoteObject implements MathInterface {
-
-    public MathServer() throws RemoteException {}
-
-    public int add(int a, int b) {
-        return a + b;
+public class CalculatorServer extends UnicastRemoteObject
+implements CalculatorInterface
+{
+    public CalculatorServer() throws RemoteException
+    {
+        super();
     }
 
-    public int sub(int a, int b) {
-        return a - b;
+    public int add(int a,int b)
+    {
+        return a+b;
     }
 
-    public int mul(int a, int b) {
-        return a * b;
+    public int sub(int a,int b)
+    {
+        return a-b;
     }
 
-    public int div(int a, int b) {
-        return a / b;
+    public int mul(int a,int b)
+    {
+        return a*b;
     }
 
-    public static void main(String args[]) {
-        try {
-            MathServer obj = new MathServer();
-            Naming.rebind("rmi://localhost/calc", obj);
-            System.out.println("Calculator Server Ready...");
-        } catch (Exception e) {
+    public float div(int a,int b)
+    {
+        return (float)a/b;
+    }
+
+    public static void main(String args[])
+    {
+        try
+        {
+            LocateRegistry.createRegistry(1099);
+
+            CalculatorServer obj = new CalculatorServer();
+
+            Naming.rebind("calc", obj);
+
+            System.out.println("Server Started");
+        }
+
+        catch(Exception e)
+        {
             System.out.println(e);
         }
     }
@@ -49,77 +69,42 @@ public class MathServer extends UnicastRemoteObject implements MathInterface {
 
 MathClient.java
 
-package rmi;
 import java.rmi.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.util.Scanner;
 
-public class MathClient extends Frame implements ActionListener {
+public class CalculatorClient
+{
+    public static void main(String args[])
+    {
+        try
+        {
+            Scanner sc = new Scanner(System.in);
 
-    TextField t1 = new TextField();
-    TextField t2 = new TextField();
-    TextField t3 = new TextField();
+            CalculatorInterface obj =
+            (CalculatorInterface)Naming.lookup("rmi://localhost/calc");
 
-    Button add = new Button("Add");
-    Button sub = new Button("Sub");
-    Button mul = new Button("Mul");
-    Button div = new Button("Div");
+            System.out.println("Enter First Number:");
+            int a = sc.nextInt();
 
-    public MathClient() {
-        setLayout(null);
+            System.out.println("Enter Second Number:");
+            int b = sc.nextInt();
 
-        t1.setBounds(100, 50, 100, 30);
-        t2.setBounds(100, 100, 100, 30);
-        t3.setBounds(100, 150, 100, 30);
+            System.out.println("Addition = " + obj.add(a,b));
 
-        add.setBounds(50, 200, 50, 30);
-        sub.setBounds(110, 200, 50, 30);
-        mul.setBounds(170, 200, 50, 30);
-        div.setBounds(230, 200, 50, 30);
+            System.out.println("Subtraction = " + obj.sub(a,b));
 
-        add(t1); add(t2); add(t3);
-        add(add); add(sub); add(mul); add(div);
+            System.out.println("Multiplication = " + obj.mul(a,b));
 
-        add.addActionListener(this);
-        sub.addActionListener(this);
-        mul.addActionListener(this);
-        div.addActionListener(this);
+            System.out.println("Division = " + obj.div(a,b));
+        }
 
-        setSize(350, 300);
-        setVisible(true);
-
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                System.exit(0);
-            }
-        });
-    }
-
-    public void actionPerformed(ActionEvent e) {
-        try {
-            MathInterface obj = (MathInterface) Naming.lookup("rmi://localhost/calc");
-
-            int a = Integer.parseInt(t1.getText());
-            int b = Integer.parseInt(t2.getText());
-            int result = 0;
-
-            if (e.getSource() == add)
-                result = obj.add(a, b);
-            else if (e.getSource() == sub)
-                result = obj.sub(a, b);
-            else if (e.getSource() == mul)
-                result = obj.mul(a, b);
-            else if (e.getSource() == div)
-                result = obj.div(a, b);
-
-            t3.setText("" + result);
-
-        } catch (Exception ex) {
-            System.out.println(ex);
+        catch(Exception e)
+        {
+            System.out.println(e);
         }
     }
-
-    public static void main(String args[]) {
-        new MathClient();
-    }
 }
+
+javac *.java
+java CalculatorServer
+java CalculatorClient
