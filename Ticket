@@ -1,0 +1,69 @@
+
+import java.awt.*;
+import java.awt.event.*;
+
+public class TicketBooking extends Frame implements ActionListener
+{
+    Label l1,l2;
+    TextField t1,t2;
+    Button b;
+
+    TicketBooking()
+    {
+        l1 = new Label("Passenger Name");
+        l2 = new Label("Passenger Age");
+
+        t1 = new TextField(20);
+        t2 = new TextField(20);
+
+        b = new Button("Book Ticket");
+
+        setLayout(new FlowLayout());
+
+        add(l1);
+        add(t1);
+
+        add(l2);
+        add(t2);
+
+        add(b);
+
+        b.addActionListener(this);
+
+        setSize(400,300);
+        setVisible(true);
+    }
+
+    public void actionPerformed(ActionEvent e)
+    {
+        String name = t1.getText();
+        int age = Integer.parseInt(t2.getText());
+
+        int amount;
+
+        if(age < 12)
+            amount = 100;
+        else
+            amount = 250;
+
+        Frame resultFrame = new Frame("Ticket Details");
+
+        resultFrame.setLayout(new FlowLayout());
+
+        Label r1 = new Label("Passenger Name : " + name);
+        Label r2 = new Label("Passenger Age : " + age);
+        Label r3 = new Label("Ticket Amount : " + amount);
+
+        resultFrame.add(r1);
+        resultFrame.add(r2);
+        resultFrame.add(r3);
+
+        resultFrame.setSize(300,200);
+        resultFrame.setVisible(true);
+    }
+
+    public static void main(String args[])
+    {
+        new TicketBooking();
+    }
+}
