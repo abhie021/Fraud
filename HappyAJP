@@ -1,0 +1,38 @@
+/*Dynamic Web Project
+New JSP File
+
+<html>
+<head>
+    <title>Simple JSP Page</title>
+</head>
+
+<body>
+
+<h2>Advanced Java JSP Example</h2>
+
+<form method="post">
+
+    Enter Your Name:
+    <input type="text" name="uname">
+
+    <input type="submit" value="Submit">
+
+</form>
+
+<%
+    String name = request.getParameter("uname");
+
+    if(name != null)
+    {
+%>
+
+<h3>Happy Advanced JAVA learning</h3>
+
+<h3>Welcome : <%= name %></h3>
+
+<%
+    }
+%>
+
+</body>
+</html>
