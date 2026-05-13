@@ -1,0 +1,93 @@
+interface
+
+import java.rmi.*;
+
+public interface FactorialInterface extends Remote
+{
+    int factorial(int n) throws RemoteException;
+}
+
+Server
+
+import java.rmi.*;
+import java.rmi.server.*;
+import java.rmi.registry.*;
+
+public class FactorialServer extends UnicastRemoteObject
+implements FactorialInterface
+{
+    public FactorialServer() throws RemoteException
+    {
+        super();
+    }
+
+    public int factorial(int n)
+    {
+        int fact = 1;
+
+        for(int i=1; i<=n; i++)
+        {
+            fact = fact * i;
+        }
+
+        return fact;
+    }
+
+    public static void main(String args[])
+    {
+        try
+        {
+            LocateRegistry.createRegistry(1099);
+
+            FactorialServer obj = new FactorialServer();
+
+            Naming.rebind("fact", obj);
+
+            System.out.println("Server Started");
+        }
+
+        catch(Exception e)
+        {
+            System.out.println(e);
+        }
+    }
+
+Client
+
+import java.rmi.*;
+import java.util.Scanner;
+
+public class FactorialClient
+{
+    public static void main(String args[])
+    {
+        try
+        {
+            Scanner sc = new Scanner(System.in);
+
+            FactorialInterface obj =
+            (FactorialInterface)Naming.lookup("rmi://localhost/fact");
+
+            System.out.println("Enter Number:");
+
+            int n = sc.nextInt();
+
+            int result = obj.factorial(n);
+
+            System.out.println("Factorial = " + result);
+        }
+
+        catch(Exception e)
+        {
+            System.out.println(e);
+        }
+    }
+}
+
+
+CMD1: javac *.java
+
+CMD2: java FactorialServer
+java FactorialClient
+}
+
