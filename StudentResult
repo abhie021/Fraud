@@ -1,0 +1,99 @@
+                    +------------------------+
+                    |    StudentResult       |
+                    +------------------------+
+                    | - t1,t2,t3 : TextField|
+                    | - b : Button           |
+                    +------------------------+
+                    | + actionPerformed()    |
+                    | + main()               |
+                    +------------------------+
+                              ▲
+                              |
+               --------------------------------
+               |                              |
+      +----------------+         +----------------------+
+      |     Frame      |         |    ActionListener    |
+      +----------------+         +----------------------+
+      | + add()        |         | + actionPerformed()  |
+      | + setSize()    |         +----------------------+
+      | + setVisible() |
+      +----------------+
+
+import java.awt.*;
+import java.awt.event.*;
+
+public class StudentResult extends Frame implements ActionListener
+{
+    Label l1,l2,l3;
+    TextField t1,t2,t3;
+    Button b;
+
+    StudentResult()
+    {
+        l1 = new Label("Marks of Subject 1");
+        l2 = new Label("Marks of Subject 2");
+        l3 = new Label("Marks of Subject 3");
+
+        t1 = new TextField(10);
+        t2 = new TextField(10);
+        t3 = new TextField(10);
+
+        b = new Button("Calculate Result");
+
+        setLayout(new FlowLayout());
+
+        add(l1);
+        add(t1);
+
+        add(l2);
+        add(t2);
+
+        add(l3);
+        add(t3);
+
+        add(b);
+
+        b.addActionListener(this);
+
+        setSize(400,300);
+        setVisible(true);
+    }
+
+    public void actionPerformed(ActionEvent e)
+    {
+        int m1 = Integer.parseInt(t1.getText());
+        int m2 = Integer.parseInt(t2.getText());
+        int m3 = Integer.parseInt(t3.getText());
+
+        int total = m1 + m2 + m3;
+        double per = total / 3.0;
+
+        Frame resultFrame = new Frame("Result");
+
+        resultFrame.setLayout(new FlowLayout());
+
+        Label r1 = new Label("Total Marks = " + total);
+        Label r2 = new Label("Percentage = " + per);
+
+        String result;
+
+        if(m1>=40 && m2>=40 && m3>=40)
+            result = "PASS";
+        else
+            result = "FAIL";
+
+        Label r3 = new Label("Result = " + result);
+
+        resultFrame.add(r1);
+        resultFrame.add(r2);
+        resultFrame.add(r3);
+
+        resultFrame.setSize(300,200);
+        resultFrame.setVisible(true);
+    }
+
+    public static void main(String args[])
+    {
+        new StudentResult();
+    }
+}
