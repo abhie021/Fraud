@@ -1,0 +1,51 @@
+import java.awt.*;
+import java.awt.event.*;
+
+public class MouseEventDemo extends Frame implements MouseListener
+{
+    Label l;
+
+    MouseEventDemo()
+    {
+        l = new Label("Bring mouse inside frame");
+
+        add(l);
+
+        setSize(400,300);
+        setLayout(new FlowLayout());
+
+        addMouseListener(this);
+
+        setVisible(true);
+    }
+
+    public void mouseEntered(MouseEvent e)
+    {
+        l.setText("Mouse Entered Frame");
+    }
+
+    public void mouseExited(MouseEvent e)
+    {
+        l.setText("Mouse Exited Frame");
+    }
+
+    public void mouseClicked(MouseEvent e)
+    {
+        l.setText("Mouse Clicked");
+    }
+
+    public void mousePressed(MouseEvent e)
+    {
+        l.setText("Mouse Pressed");
+    }
+
+    public void mouseReleased(MouseEvent e)
+    {
+        l.setText("Mouse Released");
+    }
+
+    public static void main(String args[])
+    {
+        new MouseEventDemo();
+    }
+}
