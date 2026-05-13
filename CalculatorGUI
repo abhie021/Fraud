@@ -1,0 +1,81 @@
+import java.awt.*;
+import java.awt.event.*;
+
+public class CalculatorGUI extends Frame implements ActionListener
+{
+    Label l1,l2;
+    TextField t1,t2;
+    Button b;
+
+    CalculatorGUI()
+    {
+        l1 = new Label("Enter First Number");
+        l2 = new Label("Enter Second Number");
+
+        t1 = new TextField(20);
+        t2 = new TextField(20);
+
+        b = new Button("Calculate");
+
+        setLayout(new FlowLayout());
+
+        add(l1);
+        add(t1);
+
+        add(l2);
+        add(t2);
+
+        add(b);
+
+        b.addActionListener(this);
+
+        setSize(400,300);
+        setVisible(true);
+    }
+
+    int factorial(int n)
+    {
+        int fact = 1;
+
+        for(int i=1;i<=n;i++)
+        {
+            fact = fact * i;
+        }
+
+        return fact;
+    }
+
+    public void actionPerformed(ActionEvent e)
+    {
+        int n1 = Integer.parseInt(t1.getText());
+        int n2 = Integer.parseInt(t2.getText());
+
+        int add = n1 + n2;
+        int sub = n1 - n2;
+        int mul = n1 * n2;
+        float div = (float)n1 / n2;
+
+        int fact1 = factorial(n1);
+        int fact2 = factorial(n2);
+
+        Frame resultFrame = new Frame("Result");
+
+        resultFrame.setLayout(new FlowLayout());
+
+        resultFrame.add(new Label("Addition = " + add));
+        resultFrame.add(new Label("Subtraction = " + sub));
+        resultFrame.add(new Label("Multiplication = " + mul));
+        resultFrame.add(new Label("Division = " + div));
+
+        resultFrame.add(new Label("Factorial of " + n1 + " = " + fact1));
+        resultFrame.add(new Label("Factorial of " + n2 + " = " + fact2));
+
+        resultFrame.setSize(350,300);
+        resultFrame.setVisible(true);
+    }
+
+    public static void main(String args[])
+    {
+        new CalculatorGUI();
+    }
+}
