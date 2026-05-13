@@ -1,0 +1,91 @@
+PalindromeInterface.java
+
+import java.rmi.*;
+
+public interface PalindromeInterface extends Remote
+{
+    String checkPalindrome(String str) throws RemoteException;
+}
+
+PalindromeServer.java
+
+import java.rmi.*;
+import java.rmi.server.*;
+import java.rmi.registry.*;
+
+public class PalindromeServer extends UnicastRemoteObject
+implements PalindromeInterface
+{
+    public PalindromeServer() throws RemoteException
+    {
+        super();
+    }
+
+    public String checkPalindrome(String str)
+    {
+        String rev = "";
+
+        for(int i = str.length()-1; i >= 0; i--)
+        {
+            rev = rev + str.charAt(i);
+        }
+
+        if(str.equals(rev))
+            return "Palindrome String";
+        else
+            return "Not Palindrome String";
+    }
+
+    public static void main(String args[])
+    {
+        try
+        {
+            PalindromeServer obj = new PalindromeServer();
+
+            Registry reg = LocateRegistry.createRegistry(1099);
+
+            reg.rebind("palindrome", obj);
+
+            System.out.println("Server Started");
+        }
+
+        catch(Exception e)
+        {
+            System.out.println(e);
+        }
+    }
+}
+
+PalindromeClient.java
+
+import java.rmi.*;
+import java.util.Scanner;
+
+public class PalindromeClient
+{
+    public static void main(String args[])
+    {
+        try
+        {
+            Scanner sc = new Scanner(System.in);
+
+            PalindromeInterface obj =
+            (PalindromeInterface)Naming.lookup("rmi://localhost/palindrome");
+
+            System.out.println("Enter String:");
+
+            String str = sc.nextLine();
+
+            String result = obj.checkPalindrome(str);
+
+            System.out.println(result);
+        }
+
+        catch(Exception e)
+        {
+            System.out.println(e);
+        }
+    }
+}
+
+/*Run as Java App 1 server 2 Client
